@@ -22,7 +22,7 @@
   </head>
   <body ng-controller="MainCtrl">
 
-    <div class="container">
+    <div class="container" ng-cloak>
       <ul class="nav nav-tabs nav-justified">
         <li role="presentation" ng-class="{ active: selectedTab == 'login'}">
           <a href="#" ng-click="selectedTab = 'login'">{{ strings.TAB_LOGIN }}</a>
