@@ -63,7 +63,7 @@
       .then(function(strings) {
         $scope.login.language = language;
         $scope.create.language = language;
-        $scope.strings = strings.start;
+        $scope.strings = strings;
         $scope.$apply();
         Relief.emit('languageChanged', language);
       },
