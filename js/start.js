@@ -51,12 +51,13 @@
     );
 
 
+    let emitted;
     const languageChanged = function(language) {
       if (!language) {
         return;
       }
       appData.language = language;
-      Relief.db.app.upsert(appData)
+      return Relief.db.app.upsert(appData)
       .then(function() {
         return Relief.i18n.loadStrings(language, 'start');
       })
@@ -65,7 +66,11 @@
         $scope.create.language = language;
         $scope.strings = strings;
         $scope.$apply();
-        Relief.emit('languageChanged', language);
+        if (!emitted) {
+          emitted = true;
+          return Relief.emit('languageChanged', language);
+        }
+        emitted = false;
       },
         // Error handler
         Relief.log.error
