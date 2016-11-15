@@ -86,6 +86,10 @@
         $scope.login.password
       ).then(function() {
         Relief.emit('loggedIn');
+        Relief.emit('notify', {
+          type: 'default',
+          message: $scope.strings.WELCOME + ' ' + $scope.login.username
+        });
       }, function(err) {
         $scope.forms.loginForm.$invalid = true;
         $scope.forms.loginForm.err = $scope.strings.LOGIN_ERROR_FAILED;
