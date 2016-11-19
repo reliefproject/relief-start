@@ -28,10 +28,8 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
   };
 
 
-  Relief.db.app.getDoc().then(function(data) {
-    if (data) {
-      appData = data;
-    }
+  Relief.db.app.getDoc().then(data => {
+    appData = appdata || data;
     // Show "create account" if there are no users
     if (Object.keys(appData.users).length === 0) {
       $scope.selectedTab = 'create';
@@ -42,14 +40,13 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
     $scope.create.language = $scope.login.language;
     // Let the main window show
     Relief.emit('loadingComplete');
-  },
-    // Error handler
-    Relief.log.error
-  );
+  }, err => {
+    Relief.log.error(err.stack || err);
+  });
 
 
   let emitted;
-  const languageChanged = function(language) {
+  function languageChanged(language) {
     if (!language) {
       return;
     }
@@ -74,7 +71,7 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
   $scope.$watch('create.language', languageChanged);
 
 
-  $scope.submitLoginForm = function() {
+  $scope.submitLoginForm = () => {
     if (!$scope.forms.loginForm.$valid) {
       $scope.forms.loginForm.err = $scope.strings.LOGIN_ERROR_FAILED;
       return;
@@ -93,12 +90,12 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
       $scope.forms.loginForm.$invalid = true;
       $scope.forms.loginForm.err = $scope.strings.LOGIN_ERROR_FAILED;
       $scope.$apply();
-      Relief.log.error(err.stack);
+      Relief.log.error(err.stack || err);
     });
   };
 
 
-  $scope.submitCreateForm = function() {
+  $scope.submitCreateForm = () => {
     if ($scope.create.password1 !== $scope.create.password2) {
       $scope.forms.createForm.err = $scope.strings.CREATE_ERROR_MATCH;
       return;
@@ -116,15 +113,15 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
         username: $scope.create.username,
         password: $scope.create.password1,
       })
-      .then(function() {
+      .then(() => {
         $scope.selectedTab = 'login';
         $scope.createAccountSuccess = true;
         $scope.$apply();
-      }, function(err) {
+      }, err => {
         $scope.forms.createForm.$invalid = true;
         $scope.forms.createForm.err = $scope.strings.CREATE_ERROR_NAMETAKEN;
         $scope.$apply();
-        Relief.log.error(err.stack);
+        Relief.log.error(err.stack || err);
       });
     }
   };
