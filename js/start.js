@@ -29,7 +29,7 @@ app.controller('MainCtrl', ['$scope', 'i18n', function($scope, i18n) {
 
 
   Relief.db.app.getDoc().then(data => {
-    appData = appdata || data;
+    appData = data || appData;
     // Show "create account" if there are no users
     if (Object.keys(appData.users).length === 0) {
       $scope.selectedTab = 'create';
