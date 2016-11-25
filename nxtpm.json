@@ -7,5 +7,6 @@
   "description":"Sign In, Create Account",
   "version":"0.0.0",
   "icon":"icon-user",
-  "main":"start.html"
+  "main":"start.html",
+  "relief":"0.0.0"
 }
